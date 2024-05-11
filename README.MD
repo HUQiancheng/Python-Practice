@@ -5,7 +5,7 @@ Welcome to the Python Foundations Repository. This project aims to build a compr
 ## Repository Structure
 
 ### Absolute Basics
-- Contains resources sourced from "Python Crash Course," providing an in-depth understanding of core Python concepts. You will find:
+- Contains resources sourced from ["Python Crash Course"](https://ehmatthes.github.io/pcc/), providing an in-depth understanding of core Python concepts. You will find:
   - Scripts ranging from simple introductory examples to practical exercises with data types, control structures, functions, and object-oriented programming.
 
 ### Numpy
@@ -42,11 +42,25 @@ Welcome to the Python Foundations Repository. This project aims to build a compr
    pip install -r requirements.txt
    ```
 
-If you are not familiar with Conda, please refer to the [Conda installation guide](#conda-installation-guide).
+4. **Install [Jupyter Notebook](https://jupyter.org/install) and Extensions:**
+   - Installing Jupyter Notebook (default):
+     ```
+     conda install -c conda-forge notebook
+     conda install -c conda-forge nb_conda_kernels
+     ```
+   - Installing Jupyter Lab (optional):
+     ```
+     conda install -c conda-forge jupyterlab
+     conda install -c conda-forge nb_conda_kernels
+     ```
+   - Installing Jupyter Notebook extensions (optional but recommended):
+     ```
+     conda install -c conda-forge jupyter_contrib_nbextensions
+     ```
 
 ### Usage
 
-Once the environment is set up, explore the **Absolute Basics** section to establish a fundamental understanding of Python syntax. Then proceed to the **Numpy** and **Simple_NN** directories to further delve into numerical computing and machine learning.
+Once the environment is set up, explore the [**Absolute Basics**](#absolute-basics) section to establish a fundamental understanding of Python syntax. Then proceed to the [**Numpy**](#numpy) and [**Simple_NN**](#simple_nn) directories to further delve into numerical computing and machine learning.
 
 ### Note
 This repository leverages the `i2dl` environment from TUM for compatibility and reproducibility. Refer to specific instructions if you encounter any issues.
@@ -55,7 +69,7 @@ This repository leverages the `i2dl` environment from TUM for compatibility and 
 
 - The "Absolute Basics" content is sourced from "Python Crash Course."
 - NumPy and other practical exercises are originally created.
-- **Commercial use is forbidden** as per the license. Refer to the license file for further details.
+- [MIT license](https://opensource.org/license/mit).
 
 ## Conda Installation Guide
 
@@ -64,4 +78,4 @@ If you're new to Conda, it's a powerful package manager and environment manager 
 - Visit the [Anaconda website](https://www.anaconda.com/products/individual) and download the Anaconda Installer for your operating system.
 - Follow the on-screen instructions to complete the installation. For a more detailed guide, you can check the official [Conda documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html).
 
-**First Published:** May 2024.
+**First Published:** May 2024
