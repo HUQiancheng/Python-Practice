@@ -1,6 +1,5 @@
-import os
-from DataLoader import DataLoader
-from DataProcessor import DataProcessor
+from src.data.DataLoader import DataLoader
+from src.data.DataProcessor import DataProcessor
 
 class BaseDataset:
     def __init__(self, file_path, shuffle=False, normalize=True):
@@ -15,18 +14,18 @@ class BaseDataset:
         self.shuffle = shuffle
         self.normalize = normalize
 
-        # Create DataLoader and DataProcessor instances
+        # Initialize DataLoader and DataProcessor
         self.data_loader = DataLoader(self.file_path, self.shuffle)
         self.data_processor = DataProcessor(self.data_loader, self.normalize)
 
-        # To store the split data
+        # Properties to store processed data
         self.train_data = None
         self.validate_data = None
         self.test_data = None
 
     def prepare_data(self):
         """
-        Load and process the data through the DataLoader and DataProcessor.
+        Load and process the data through the DataLoader and DataProcessor, then store it.
         """
         # Process data and split into train, validation, and test sets
         self.train_data, self.validate_data, self.test_data = self.data_processor.process_data()

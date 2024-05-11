@@ -1,6 +1,8 @@
+import os
 import numpy as np
 from sklearn.preprocessing import StandardScaler
-import Utils_Data
+from src.data.Utils_Data import split_data
+
 
 class DataProcessor:
     def __init__(self, data_loader, normalize=True, train_size=0.7, validate_size=0.15, test_size=0.15):
@@ -32,7 +34,7 @@ class DataProcessor:
         data = self.data_loader.load_data()
 
         # Split the data into training, validation, and test sets
-        self.train_data, self.validate_data, self.test_data = Utils_Data.split_data(
+        self.train_data, self.validate_data, self.test_data = split_data(
             data, train_size=self.train_size, validate_size=self.validate_size, test_size=self.test_size
         )
 
