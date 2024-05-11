@@ -42,6 +42,8 @@ Welcome to the Python Foundations Repository. This project aims to build a compr
    pip install -r requirements.txt
    ```
 
+If you are not familiar with Conda, please refer to the [Conda installation guide](#conda-installation-guide).
+
 ### Usage
 
 Once the environment is set up, explore the **Absolute Basics** section to establish a fundamental understanding of Python syntax. Then proceed to the **Numpy** and **Simple_NN** directories to further delve into numerical computing and machine learning.
@@ -53,6 +55,13 @@ This repository leverages the `i2dl` environment from TUM for compatibility and 
 
 - The "Absolute Basics" content is sourced from "Python Crash Course."
 - NumPy and other practical exercises are originally created.
-- **Commercial use is strictly forbidden** as per the license. Refer to the license file for further details.
+- **Commercial use is forbidden** as per the license. Refer to the license file for further details.
+
+## Conda Installation Guide
+
+If you're new to Conda, it's a powerful package manager and environment manager that you can use with command line commands on macOS, Linux, and Windows. Conda makes it easy to install, run, and upgrade complex software dependencies. Here is how you can install Conda:
+
+- Visit the [Anaconda website](https://www.anaconda.com/products/individual) and download the Anaconda Installer for your operating system.
+- Follow the on-screen instructions to complete the installation. For a more detailed guide, you can check the official [Conda documentation](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html).
 
 **First Published:** May 2024.
