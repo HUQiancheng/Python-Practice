@@ -1,69 +1,121 @@
 # Standard Neural Network Project
 
-This project is designed to provide a fundamental understanding of neural network operations using very basic Python libraries. It is tailored for educational purposes, particularly for those interested in understanding machine learning workflows without the use of advanced libraries like PyTorch or TensorFlow.
+## Overview
+
+This project implements a fundamental neural network framework using basic Python libraries. It provides an intuitive and educational environment to learn machine learning workflows without relying on advanced machine learning frameworks like TensorFlow or PyTorch. The project is designed to be modular, expandable, and easy to understand, especially for those seeking foundational knowledge about neural network architectures.
 
 ## Prerequisites
 
-The project is built using only the following libraries:
-- `numpy`: For numerical operations and array handling.
-- `pandas`: For data manipulation and ingestion.
-- `sklearn`: For basic machine learning tools and pre-processing.
-- `matplotlib`: For plotting and visualization of data and learning metrics.
+Ensure you have the following Python libraries installed:
+- **Numpy**: For numerical operations and array handling.
+- **Pandas**: For data manipulation and ingestion.
+- **Scikit-learn**: For basic machine learning tools and preprocessing.
+- **Matplotlib**: For plotting and visualization of data and learning metrics.
 
-Ensure that you have the above libraries installed. You can install them using pip:
+To install these dependencies, use:
 ```bash
 pip install numpy pandas scikit-learn matplotlib
 ```
 
 ## Project Structure
 
-- **dataset/data**
-  - **data.csv**: The main dataset used for training and testing the neural network.
-- **src**
-  - **test.py**: Script for testing the neural network.
-  - **trainer.py**: Contains the main training loop for the neural network.
-  - **validation.py**: Handles the validation process during training.
-  - **data**
-    - **BaseDataset.py**: Polymorphic base class for datasets.
-    - **DataLoader.py**: Facilitates data loading.
-    - **DataProcessor.py**: Processes data for neural network input.
-    - **Utils_Data.py**: Utilities for data handling.
-  - **models**
-    - **BaseNetwork.py**: Polymorphic base class for neural network models.
-    - **LossFunction.py**: Implements the Binary Cross-Entropy Loss.
-    - **Optimizer.py**: Basic optimizer for neural network training.
-    - **Utils_Model.py**: Model-related utilities.
-  - **utils**
-    - **Utils.py**: General utilities for the project.
-- **trained_models**
-  - *Directory to store models after training.*
+```plaintext
+C:.
+│   README.MD
+│   TemplateNN.ipynb
+│   
+├───dataset
+│   └───data
+│           data.csv
+│
+├───src
+│   test.py
+│   trainer.py
+│   validation.py
+│   __init__.py
+│   
+├───src/data
+│   BaseDataset.py
+│   DataLoader.py
+│   DataProcessor.py
+│   Utils_Data.py
+│   __init__.py
+│   
+├───src/models
+│   BaseNetwork.py
+│   LossFunction.py
+│   Optimizer.py
+│   Utils_Model.py
+│   __init__.py
+│
+├───src/utils
+│   Utils.py
+│   __init__.py
+│
+└───trained_models
+```
 
-## Usage
+- **dataset/data**: Contains the primary dataset (`data.csv`).
+- **src/test.py**: Script for testing the neural network.
+- **src/trainer.py**: Main training loop for the neural network.
+- **src/validation.py**: Handles the validation process during training.
+- **src/data**:
+  - **BaseDataset.py**: Polymorphic base class for datasets.
+  - **DataLoader.py**: Loads and shuffles data.
+  - **DataProcessor.py**: Prepares data for model training.
+  - **Utils_Data.py**: Utilities for data handling.
+- **src/models**:
+  - **BaseNetwork.py**: Base class for neural network models.
+  - **LossFunction.py**: Implements the Binary Cross-Entropy Loss.
+  - **Optimizer.py**: Basic optimizer for network training.
+  - **Utils_Model.py**: Model-related utilities.
+- **src/utils**:
+  - **Utils.py**: General utilities for the project.
+- **trained_models**: Directory to store models after training.
+
+## Key Features
+
+1. **Custom Neural Network Framework**: Modular and expandable structure, starting with a base network class and core modules like loss functions and optimizers.
+   
+2. **Polymorphic Data Pipeline**:
+   - **BaseDataset**: A flexible data structure that orchestrates data loading and preprocessing.
+   - **DataLoader**: Efficiently loads data from CSV files and optionally shuffles it.
+   - **DataProcessor**: Normalizes, reshapes, and splits the data into training, validation, and test sets.
+   - **Utils_Data**: Includes visualization functions for data understanding.
+
+3. **Model Training and Testing**:
+   - **trainer.py**: Main script to train the neural network.
+   - **test.py**: Evaluates the trained network's performance on the test dataset.
+
+## Usage Instructions
 
 ### Training the Model
 
-Navigate to the `src` directory and run the `trainer.py` script to start training the model:
-```bash
-python trainer.py
-```
+1. Navigate to the `src` directory:
+   ```bash
+   cd src
+   ```
+
+2. Run the `trainer.py` script to start training the model:
+   ```bash
+   python trainer.py
+   ```
 
 ### Evaluating the Model
 
-After training, evaluate the model's performance by running the `test.py` script:
+After training, evaluate the model's performance by running `test.py`:
 ```bash
 python test.py
 ```
 
-### Visualization
+### Visualization and Analysis
 
-Plot the training and validation losses using `matplotlib` within the training or testing scripts, which helps in understanding the model's learning curve.
+The data utility functions can visualize data properties via histograms, scatter plots, and line plots using `matplotlib`. Example functions are available in `Utils_Data.py`.
 
-## Features
+## Further Development
 
-- **Linear Classification**: Implements a simple linear classifier.
-- **Binary Cross-Entropy Loss**: Utilizes BCE loss for binary classification tasks.
-- **CSV Dataset Handling**: The system is designed to work with datasets in CSV format by default.
+- **New Architectures**: Extend `BaseNetwork` to build more complex neural network architectures.
+- **Dataset Handling**: Implement new data loaders or processors for different datasets/formats.
+- **Custom Optimizers/Loss Functions**: Add custom optimization and loss calculation strategies.
 
-## Notes
-
-This project is setup in a way that allows for expansion and incorporation of more complex functionalities. The use of polymorphism in `BaseDataset` and `BaseNetwork` ensures that the project can be extended to other types of datasets or neural network architectures with minimal changes.
+The project's modular structure facilitates the addition of new features with minimal disruption.
