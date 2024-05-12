@@ -1,78 +1,108 @@
+import os
+import pickle
 import numpy as np
-from BaseNetwork import BaseNetwork
+from src.models.BaseNetwork import BaseNetwork
 
-class ClassifierNetwork(BaseNetwork):
-    def __init__(self, layer_dims):
+class Classifier(BaseNetwork):
+    """
+    Classifier of the form y = sigmoid(X * W)
+    """
+
+    def __init__(self, num_features=2, model_name="classifier"):
+        super().__init__(model_name)
+        self.num_features = num_features
+        self.W = None
+        self.cache = None
+        self.initialize_weights()
+
+    def initialize_weights(self, weights=None):
         """
-        Initialize the network layers.
+        Initialize the weight matrix W
         Args:
-            layer_dims (list): List containing the dimensions of each layer.
+            weights (np.array): Optional weights for initialization
         """
-        super().__init__()
-        self.layer_dims = layer_dims
-        self.initialize_parameters()
+        if weights is not None:
+            assert weights.shape == (self.num_features + 1, 1), \
+                "weights for initialization are not in the correct shape (num_features + 1, 1)"
+            self.W = weights
+        else:
+            self.W = 0.001 * np.random.randn(self.num_features + 1, 1)
 
-    def initialize_parameters(self):
+    def forward(self, X):
         """
-        Initialize weights and biases for each layer of the network.
-        """
-        np.random.seed(1)  # Ensure consistent initialization for reproducibility
-        for i in range(1, len(self.layer_dims)):
-            self.parameters['W' + str(i)] = np.random.randn(self.layer_dims[i], self.layer_dims[i - 1]) * 0.01
-            self.parameters['b' + str(i)] = np.zeros((self.layer_dims[i], 1))
-
-    def apply_activation(self, x):
-        """
-        Apply the sigmoid activation function.
+        Performs the forward pass of the model.
         Args:
-            x (np.array): Linear combination from a layer's output before activation.
+            X (np.array): N x D array of training data. Each row is a D-dimensional point.
+            Note that it is changed to N x (D + 1) to include the bias term.
         Returns:
-            np.array: Activated output using the sigmoid function.
+            np.array: Predicted logits for the data in X, shape N x 1
         """
-        return 1 / (1 + np.exp(-x)) # Sigmoid activation
+        assert self.W is not None, "weight matrix W is not initialized"
 
-    def forward(self, x):
+        # Add a column of 1s to the data for the bias term
+        batch_size, _ = X.shape
+        X = np.concatenate((X, np.ones((batch_size, 1))), axis=1)
+
+        # Linear affine transformation
+        s = np.dot(X, self.W)
+
+        # Apply sigmoid activation function
+        z = self.sigmoid(s)
+
+        # Cache relevant variables for backward pass
+        self.cache = (X, s, z)
+
+        return z
+
+    def backward(self, dout):
         """
-        Implement forward propagation for the MLP using sigmoid activation.
+        Performs the backward pass of the model.
         Args:
-            x (np.array): Input data.
+            dout (np.array): N x M array. Upstream derivative with the same shape as forward output.
         Returns:
-            np.array: The final output of the network.
+            np.array: Gradient of the weight matrix w.r.t the upstream gradient 'dout'.
         """
-        activations = x
-        self.activations = {'A0': activations}  # Store initial input
+        assert self.cache is not None, "Run a forward pass before the backward pass."
 
-        # Forward pass through each layer
-        L = len(self.layer_dims) - 1
-        for l in range(1, L + 1):
-            Z = np.dot(self.parameters['W' + str(l)], activations) + self.parameters['b' + str(l)]
-            activations = self.apply_activation(Z)
-            self.activations['A' + str(l)] = activations
+        # Retrieve cached variables
+        X_with_bias, s, z = self.cache
 
-        return activations
+        # Calculate the gradient of the sigmoid output w.r.t. the linear layer output 's'
+        ds = z * (1 - z) * dout
 
-    def backward(self, y_true):
+        # Gradient of the weights, now summing over the batch dimension
+        dW = np.dot(X_with_bias.T, ds) / X_with_bias.shape[0]  # Normalizing by batch size
+
+        return dW
+
+    def sigmoid(self, x):
         """
-        Implement backward propagation for the MLP.
+        Computes the output of the sigmoid function.
         Args:
-            y_true (np.array): True binary labels.
+            x (np.array): Input of the sigmoid, np.array of any shape
         Returns:
-            dict: Gradients of weights and biases.
+            np.array: Output of the sigmoid with the same shape as input vector x
         """
-        gradients = {}
-        L = len(self.layer_dims) - 1  # Total number of layers
+        return 1 / (1 + np.exp(-x))
 
-        # Output layer gradient using binary cross-entropy loss derivative with sigmoid
-        dZL = self.activations['A' + str(L)] - y_true
-        gradients['dW' + str(L)] = np.dot(dZL, self.activations['A' + str(L - 1)].T) / y_true.shape[1]
-        gradients['db' + str(L)] = np.sum(dZL, axis=1, keepdims=True) / y_true.shape[1]
+    def save_model(self, path='models'):
+        """
+        Save the model using pickle.
+        Args:
+            path (str): Directory where the model should be saved.
+        """
+        if not os.path.exists(path):
+            os.makedirs(path)
+        model_file = os.path.join(path, self.model_name + '.p')
+        with open(model_file, 'wb') as file:
+            pickle.dump(self, file)
 
-        # Backpropagate through hidden layers
-        for l in reversed(range(1, L)):
-            dA_prev = np.dot(self.parameters['W' + str(l + 1)].T, dZL)
-            dZ = dA_prev * (self.activations['A' + str(l)] * (1 - self.activations['A' + str(l)]))
-            gradients['dW' + str(l)] = np.dot(dZ, self.activations['A' + str(l - 1)].T) / y_true.shape[1]
-            gradients['db' + str(l)] = np.sum(dZ, axis=1, keepdims=True) / y_true.shape[1]
-            dZL = dZ
-
-        return gradients
+    def load_model(self, path):
+        """
+        Load the model using pickle.
+        Args:
+            path (str): Path to the file from which to load the model.
+        """
+        with open(path, 'rb') as file:
+            model = pickle.load(file)
+        self.__dict__.update(model.__dict__)

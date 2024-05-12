@@ -1,20 +1,30 @@
-class SGDOptimizer:
-    def __init__(self, learning_rate=0.01):
+class Optimizer:
+    def __init__(self, model, learning_rate=5e-5):
         """
-        Initialize the SGD optimizer with a given learning rate.
+        Initialize the optimizer with a reference to the model and a specified learning rate.
+        
         Args:
-            learning_rate (float): The step size used for each iteration of the optimization.
+            model: The model whose parameters will be optimized.
+            learning_rate (float): The step size used for updating the parameters.
         """
-        self.learning_rate = learning_rate
+        self.model = model
+        self.lr = learning_rate
 
-    def update_params(self, model_parameters, gradients):
+    def step(self, dw):
         """
-        Update the model parameters using stochastic gradient descent.
+        Perform a single gradient descent update on the model's weights.
+        
         Args:
-            model_parameters (dict): Dictionary containing the parameters of the model (weights and biases).
-            gradients (dict): Dictionary containing the gradients of the loss function with respect to the parameters.
+            dw (np.array): The gradient of the loss function with respect to the model's weights.
+        
+        Returns:
+            None: This method updates the model's weights directly.
         """
-        for key in model_parameters.keys():
-            # Ensure that the gradient exists for the current parameter
-            if key in gradients:
-                model_parameters[key] -= self.learning_rate * gradients[key]
+        # Retrieve the current weights from the model
+        weight = self.model.W
+
+        # Update the weights using gradient descent
+        weight -= self.lr * dw
+
+        # Save the updated weights back to the model
+        self.model.W = weight

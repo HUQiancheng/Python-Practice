@@ -1,56 +1,65 @@
 import numpy as np
+from abc import ABC, abstractmethod
 
-class BaseNetwork:
-    def __init__(self):
+class BaseNetwork(ABC):
+    def __init__(self, model_name="default_model"):
         """
         Initialize common properties for network models.
         """
-        self.parameters = {}  # Initialize an empty dict for parameters
-        self.activations = {}  # To store activations if necessary for backward pass
+        self.model_name = model_name
+        self.return_grad = True
+        self.parameters = {}
 
+    @abstractmethod
     def forward(self, x):
         """
-        Compute the forward pass. Must be implemented by subclass.
+        Compute the forward pass.
         Args:
             x (np.array): Input data.
-        Raises:
-            NotImplementedError: If the subclass does not implement this method.
         """
-        raise NotImplementedError("Forward method must be implemented by subclass.")
+        pass
 
+    @abstractmethod
     def backward(self, grad):
         """
-        Compute the backward pass. Must be implemented by subclass.
+        Compute the backward pass.
         Args:
             grad (np.array): Gradient of the loss function with respect to the output.
-        Raises:
-            NotImplementedError: If the subclass does not implement this method.
         """
-        raise NotImplementedError("Backward method must be implemented by subclass.")
+        pass
 
+    def __call__(self, x):
+        """
+        Make the network callable.
+        """
+        return self.forward(x)
+
+    def train(self):
+        """
+        Set the network to training mode.
+        """
+        self.return_grad = True
+
+    def eval(self):
+        """
+        Set the network to evaluation mode.
+        """
+        self.return_grad = False
+
+    @abstractmethod
     def save_model(self, path):
         """
-        Save the model parameters to a file using numpy.
+        Save the model parameters to a file.
         Args:
             path (str): The path to the file where to save the model.
         """
-        np.savez(path, **self.parameters)
+        pass
 
+    @abstractmethod
     def load_model(self, path):
         """
-        Load the model parameters from a file using numpy.
+        Load the model parameters from a file.
         Args:
             path (str): The path to the file from which to load the model.
         """
-        data = np.load(path, allow_pickle=True)  # Ensure that loading handles object arrays
-        self.parameters = {key: data[key] for key in data.files}
-
-    def apply_activation(self, x):
-        """
-        Apply activation function, to be overridden by subclasses if they require specific activations.
-        Args:
-            x (np.array): Linear combination from a layer's output before activation.
-        Returns:
-            np.array: Activated output.
-        """
-        raise NotImplementedError("Activation function must be implemented by subclass.")
+        pass

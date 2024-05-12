@@ -60,4 +60,39 @@ def plot_all_histograms(data, exclude_columns=['target'], bins=20):
     plt.tight_layout()
     plt.show()
 
+def plot_2d_data(data, feature_columns=['x1', 'x2'], label_column='target'):
+    """
+    Plot a 2D scatter plot for the given data if it has exactly two feature columns.
+    Args:
+        data (DataFrame): The dataset containing at least two features.
+        feature_columns (list): List containing the two feature columns to plot.
+        label_column (str): Name of the column containing the target labels.
+    """
+    # Ensure there are exactly two features specified for plotting
+    if len(feature_columns) != 2:
+        print("Plotting unavailable: Requires exactly 2 feature columns.")
+        return
+
+    # Ensure the feature columns are present in the data
+    if not all(col in data.columns for col in feature_columns):
+        print("Plotting unavailable: One or both feature columns not found in the data.")
+        return
+
+    # Extract features and labels
+    x1 = data[feature_columns[0]]
+    x2 = data[feature_columns[1]]
+    labels = data[label_column]
+
+    # Plot using different colors for each label
+    plt.figure(figsize=(10, 6))
+    for label in sorted(labels.unique()):
+        plt.scatter(x1[labels == label], x2[labels == label], label=f'Category {label}', alpha=0.6)
+
+    plt.xlabel(feature_columns[0])
+    plt.ylabel(feature_columns[1])
+    plt.title("2D Data Point Plot")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
 
