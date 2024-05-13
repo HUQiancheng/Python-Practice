@@ -1,3 +1,12 @@
+# use conda:
+# conda remove --name dir2xml --all
+# conda create -n dir2xml
+# conda activate dir2xml
+# conda install -c anaconda tk
+
+# or use pip:
+# pip install tk
+
 import os
 import xml.etree.ElementTree as ET
 import tkinter as tk
