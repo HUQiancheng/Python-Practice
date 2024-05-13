@@ -37,7 +37,8 @@ class DirectoryToXMLModel:
         return ET.ElementTree(root_element)
 
     def save_xml_tree_to_file(self, tree):
-        save_path = os.path.join(self.save_dir, 'output.xml')
+        root_dir_name = os.path.basename(self.root_dir).replace(' ', '_')
+        save_path = os.path.join(self.save_dir, f'{root_dir_name}.xml')
         tree.write(save_path, encoding='utf-8', xml_declaration=True)
         return save_path, tree
 
