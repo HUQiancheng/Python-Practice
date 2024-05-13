@@ -1,12 +1,3 @@
-# use conda:
-# conda remove --name dir2xml --all
-# conda create -n dir2xml
-# conda activate dir2xml
-# conda install -c anaconda tk
-
-# or use pip:
-# pip install tk
-
 import os
 import xml.etree.ElementTree as ET
 import tkinter as tk
@@ -26,12 +17,12 @@ class DirectoryToXMLModel:
     def build_xml_tree_bfs(self):
         def sanitize_tag(name):
             return ''.join(e for e in name if e.isalnum() or e in ['_'])
-        
+
         root_dir_name = sanitize_tag(os.path.basename(self.root_dir))
         root_element = ET.Element(root_dir_name, type="dir", path=self.root_dir)
 
         queue = [(self.root_dir, root_element)]
-        
+
         while queue:
             current_path, current_element = queue.pop(0)
             with os.scandir(current_path) as it:
@@ -42,6 +33,8 @@ class DirectoryToXMLModel:
                         queue.append((entry.path, dir_element))
                     elif entry.is_file() and entry.name.split('.')[-1] in self.file_types:
                         file_element = ET.SubElement(current_element, entry_name_sanitized, type="file", filetype=entry.name.split('.')[-1], path=entry.path)
+                        file_content = self.read_file_contents(entry.path)
+                        file_element.text = file_content  # Include file content in XML
 
         return ET.ElementTree(root_element)
 
@@ -104,11 +97,11 @@ class DirectoryToXMLView(tk.Tk):
         save_dir = self.save_dir_entry.get()
         selected_indices = self.file_types_menu.curselection()
         selected_file_types = [self.file_types_menu.get(i) for i in selected_indices]
-        
+
         if not root_dir or not save_dir or not selected_file_types:
             messagebox.showerror("Error", "Please fill in all fields.")
             return
-        
+
         self.controller.generate_xml(root_dir, save_dir, selected_file_types)
 
     def display_xml_tree(self, xml_tree):
