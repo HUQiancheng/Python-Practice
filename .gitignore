@@ -1,5 +1,7 @@
 *.pyc
 *.xml
+__pycache__/
 .vscode/
 build/
 dataset/
+*.png
