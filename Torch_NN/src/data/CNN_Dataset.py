@@ -3,22 +3,35 @@ from PIL import Image, ImageOps  # 用于图像处理和颜色反转
 import torch  # PyTorch 库的核心
 from torch.utils.data import Dataset  # 用于创建自定义数据集
 from torchvision import transforms  # 用于图像数据的转换和预处理
+from sklearn.model_selection import train_test_split  # 用于数据集划分
 
 # 定义自定义数据集类
 class CNN_Dataset(Dataset):
-    def __init__(self, root_dir, transform=None):
+    def __init__(self, root_dir, transform=None, train=True, train_ratio=0.8):
         """
         初始化数据集
 
         参数:
         root_dir (str): 数据集的根目录
         transform (callable, optional): 应用于图像的转换函数
+        train (bool): 指定是训练集还是验证集
+        train_ratio (float): 训练集比例，默认为0.8
         """
         self.root_dir = root_dir  # 保存数据集的根目录
         self.transform = transform  # 保存图像转换函数
+        self.train = train  # 是否是训练集
         self.image_files = []  # 存储所有图像文件路径
         self.labels = []  # 存储所有图像对应的标签
         self._load_data(root_dir)  # 加载数据
+
+        # 划分训练集和验证集
+        train_files, val_files, train_labels, val_labels = train_test_split(
+            self.image_files, self.labels, train_size=train_ratio, stratify=self.labels, random_state=42
+        )
+        if self.train:
+            self.image_files, self.labels = train_files, train_labels
+        else:
+            self.image_files, self.labels = val_files, val_labels
 
     def _load_data(self, root_dir):
         """

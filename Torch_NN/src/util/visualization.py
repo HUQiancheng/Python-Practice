@@ -64,3 +64,31 @@ def plot_predictions(model, dataloader, device):
             ax.axis('off')  # 关闭坐标轴
     plt.tight_layout()  # 调整子图间距
     plt.show()  # 显示绘图结果
+
+def plot_training_history(history):
+    """
+    绘制训练和验证过程中的损失和准确率曲线
+
+    参数:
+    history (dict): 训练过程中记录的损失和准确率
+    """
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))  # 创建一个包含两个子图的绘图窗口
+
+    # 绘制训练和验证损失曲线
+    ax1.plot(history['train_loss'], label='Train Loss')
+    ax1.plot(history['val_loss'], label='Val Loss')
+    ax1.set_title('Loss')
+    ax1.set_xlabel('Epoch')
+    ax1.set_ylabel('Loss')
+    ax1.legend()
+
+    # 绘制训练和验证准确率曲线
+    ax2.plot(history['train_accuracy'], label='Train Accuracy')
+    ax2.plot(history['val_accuracy'], label='Val Accuracy')
+    ax2.set_title('Accuracy')
+    ax2.set_xlabel('Epoch')
+    ax2.set_ylabel('Accuracy')
+    ax2.legend()
+
+    plt.tight_layout()  # 调整子图间距
+    plt.show()  # 显示绘图结果
