@@ -64,8 +64,8 @@ class DirectoryToXMLView(tk.Tk):
 
         tk.Label(self, text="Select File Types:").grid(row=2, column=0, padx=10, pady=5, sticky='w')
         self.file_types_var = tk.StringVar(value=[])
-        self.file_types_menu = tk.Listbox(self, listvariable=self.file_types_var, selectmode=tk.MULTIPLE, height=4)
-        for item in ["C", "C++", "Python", "Notebook"]:
+        self.file_types_menu = tk.Listbox(self, listvariable=self.file_types_var, selectmode=tk.MULTIPLE, height=6)
+        for item in ["C", "C++", "Python", "Notebook", "Dependencies", "Readme"]:
             self.file_types_menu.insert(tk.END, item)
         self.file_types_menu.grid(row=2, column=1, padx=10, pady=5)
 
@@ -137,11 +137,14 @@ class DirectoryToXMLView(tk.Tk):
 
 class DirectoryToXMLController:
     FILE_TYPE_MAP = {
-        "C": ["c", "h"],
-        "C++": ["cpp", "h", "hpp"],
-        "Python": ["py"],
-        "Notebook": ["ipynb"]
+    "C": ["c", "h"],
+    "C++": ["cpp", "h", "hpp"],
+    "Python": ["py"],
+    "Notebook": ["ipynb"],
+    "Dependencies": ["toml", "yml"],
+    "Readme": ["md", "txt"]
     }
+
 
     def __init__(self):
         self.view = DirectoryToXMLView(self)
